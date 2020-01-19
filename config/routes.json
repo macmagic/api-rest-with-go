@@ -1,0 +1,10 @@
+{
+  "routes": [
+    {
+      "name" : "index",
+      "method" : "GET",
+      "path" : "/",
+      "hnadleFunc" : "Index"
+    }
+  ]
+}
