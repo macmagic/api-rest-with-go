@@ -5,6 +5,6 @@ import (
 	"net/http"
 )
 
-func Index(writer http.ResponseWriter, r http.Request) {
-	fmt.Println("API REST EXAMPLE")
+func IndexAction(writer http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(writer, "Hello world!")
 }

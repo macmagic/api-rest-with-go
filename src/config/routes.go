@@ -1,10 +1,11 @@
 package config
 
 import (
+	actions "../action"
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -19,17 +20,28 @@ type Routes struct {
 	Routes []Route
 }
 
+var functions = map[string]http.HandlerFunc{
+	"Index":      actions.IndexAction,
+	"UploadFile": actions.UploadFile,
+}
+
 func LoadRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
-	/*routes := getRoutesFromFile()
-	for()*/
+	routes := getRoutesFromFile()
+	for _, route := range routes.Routes {
+		log.Print(route.Name)
+		router.
+			Methods(route.Method).
+			Path(route.Path).
+			Name(route.Name).
+			Handler(functions[route.HandleFunc])
+	}
 	return router
 }
 
 func getRoutesFromFile() Routes {
 	var routes Routes
 	path, _ := os.Getwd()
-	fmt.Println(path)
 	file, errOs := os.OpenFile(path+"/config/routes.json", os.O_RDONLY, 0777)
 
 	if errOs != nil {

@@ -1,0 +1,16 @@
+{
+  "server": {
+    "port": 8080,
+    "domain": "localhost",
+    "database" : {
+      "host": "localhost",
+      "port": 63306,
+      "user": "apirestgo",
+      "password": "temporal",
+      "db": "apirestgo"
+    },
+    "files": {
+      "filePath": "/tmp"
+    }
+  }
+}
