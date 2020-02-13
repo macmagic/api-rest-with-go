@@ -1,11 +1,11 @@
 package main
 
 import (
-	"./src"
+	app "./app"
 	"fmt"
 )
 
 func main() {
 	fmt.Println("App go START")
-	src.Run()
+	app.Run()
 }

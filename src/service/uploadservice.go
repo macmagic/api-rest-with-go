@@ -1,14 +1,15 @@
 package service
 
 import (
-	config "../config"
+	"../config"
 	"fmt"
-	"io/ioutil"
-	"net/http"
+
 )
 
-func Uploader(r *http.Request) int {
+var filePath string
 
+/*func Uploader(r *http.Request) int {
+	filePath = config.Config.Server.Files.Path
 	r.ParseMultipartForm(10 << 20)
 	file, handler, err := r.FormFile("file")
 
@@ -24,7 +25,7 @@ func Uploader(r *http.Request) int {
 
 	defer file.Close()
 
-	tmpFile, err := ioutil.TempFile(config.GetAppConfig().Files.Path, "upload-*.png")
+	tmpFile, err := ioutil.TempFile(filePath, "upload-*.png")
 
 	if err != nil {
 		fmt.Println(err)
@@ -42,4 +43,8 @@ func Uploader(r *http.Request) int {
 	fmt.Println("Finish")
 
 	return 0
+}*/
+
+func NewService(){
+	fmt.Println(BaseConfig.Server.Domain)
 }

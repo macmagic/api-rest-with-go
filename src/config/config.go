@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"strconv"
 	"sync"
 )
 
@@ -31,21 +30,20 @@ type AppConfig struct {
 	Server ServerConfig
 }
 
-var appConfig *ServerConfig
+var Config *AppConfig
 var once sync.Once
 
-func GetAppConfig() *ServerConfig {
+func GetAppConfig() {
 	once.Do(func() {
 		appServerConfig := loadConfig()
-		appConfig = &appServerConfig
+		Config = &appServerConfig
 	})
-	return appConfig
 }
 
-func loadConfig() ServerConfig {
+func loadConfig() AppConfig {
 	var appConfig AppConfig
 	path, _ := os.Getwd()
-	file, errOs := os.OpenFile(path+"/config/app.json", os.O_RDONLY, 0777)
+	file, errOs := os.OpenFile(path+"/../config/app.json", os.O_RDONLY, 0777)
 
 	if errOs != nil {
 		log.Fatal(errOs)
@@ -59,6 +57,5 @@ func loadConfig() ServerConfig {
 		log.Fatal(err)
 	}
 
-	log.Println(appConfig.Server.Domain + ":" + strconv.Itoa(appConfig.Server.Port))
-	return appConfig.Server
+	return appConfig
 }

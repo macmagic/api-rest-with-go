@@ -1,10 +1,13 @@
 package action
 
 import (
-	service "../service"
+
 	"net/http"
+	"../service"
 )
 
+
+
 func UploadFile(writer http.ResponseWriter, r *http.Request) {
-	service.Uploader(r)
+	service.NewService()
 }
