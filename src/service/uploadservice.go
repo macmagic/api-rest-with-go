@@ -1,9 +1,7 @@
 package service
 
 import (
-	"../config"
 	"fmt"
-
 )
 
 var filePath string
@@ -45,6 +43,6 @@ var filePath string
 	return 0
 }*/
 
-func NewService(){
+func NewService() {
 	fmt.Println(BaseConfig.Server.Domain)
 }

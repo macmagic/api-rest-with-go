@@ -1,6 +1,6 @@
 package service
 
-import "../config"
+import "config"
 
 var BaseConfig *config.AppConfig
 

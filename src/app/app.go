@@ -1,10 +1,10 @@
 package app
 
 import (
-	"../config"
+	"config"
 	"log"
 	"net/http"
-	"../service"
+	"service"
 	"strconv"
 )
 
