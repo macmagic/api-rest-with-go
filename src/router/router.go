@@ -1,4 +1,4 @@
-package config
+package router
 
 import (
 	"action"
@@ -20,14 +20,9 @@ type Routes struct {
 	Routes []Route
 }
 
-var functions = map[string]http.HandlerFunc{
-	"Index":      action.IndexAction,
-	"UploadFile": action.UploadFile,
-}
-
-func LoadRouter() *mux.Router {
-	router := mux.NewRouter().StrictSlash(true)
-	routes := getRoutesFromFile()
+func LoadRoutes() *mux.Router {
+	var routes = getRoutesFromFile()
+	var router = mux.NewRouter().StrictSlash(true)
 	for _, route := range routes.Routes {
 		log.Print(route.Name)
 		router.
@@ -42,8 +37,8 @@ func LoadRouter() *mux.Router {
 func getRoutesFromFile() Routes {
 	var routes Routes
 	path, _ := os.Getwd()
-	log.Println("Path of file: " + path + "/../config/routes.json")
-	file, errOs := os.OpenFile(path+"/../config/routes.json", os.O_RDONLY, 0777)
+	log.Println("Path of file: " + path + "/router/routes.json")
+	file, errOs := os.OpenFile(path+"/router/routes.json", os.O_RDONLY, 0777)
 
 	if errOs != nil {
 		log.Fatal(errOs)
@@ -57,4 +52,9 @@ func getRoutesFromFile() Routes {
 		log.Fatal(err)
 	}
 	return routes
+}
+
+var functions = map[string]http.HandlerFunc{
+	"Index":      action.IndexAction,
+	"UploadFile": action.UploadFile,
 }

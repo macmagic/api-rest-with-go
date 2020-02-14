@@ -6,5 +6,7 @@ import (
 )
 
 func UploadFile(writer http.ResponseWriter, r *http.Request) {
-	service.NewService()
+	service.Uploader(r)
+	writer.WriteHeader(201)
+	writer.Write([]byte("UPLOAD OK"))
 }
