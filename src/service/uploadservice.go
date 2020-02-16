@@ -42,23 +42,30 @@ func Uploader(r *http.Request) int {
 		log.Fatal(err)
 	}
 
-	var uploadData = models.Upload{
-		Id:           0,
-		Name:         handler.Filename,
-		OriginalName: handler.Filename,
-		Extension:    filepath.Ext(handler.Filename),
-		Path:         path + handler.Filename,
-	}
-
-	models.CreateUpload(uploadData)
-
 	defer f.Close()
 
 	io.Copy(f, file)
 
+	fi, err := f.Stat()
+
+	if err != nil {
+		log.Fatal("Error when get stat from file: " + err.Error())
+	}
+
+	saveUpload(handler.Filename, handler.Filename, filepath.Ext(handler.Filename), filePath, fi.Size())
+
 	return 0
 }
 
-func saveUpload(filename string, originalname string, extension string, path string) {
+func saveUpload(filename string, originalname string, extension string, path string, filesize int64) {
+	var uploadData = models.Upload{
+		Id:           0,
+		Name:         filename,
+		OriginalName: originalname,
+		Extension:    extension,
+		Path:         path,
+		Filesize:     filesize,
+	}
 
+	models.CreateUpload(uploadData)
 }

@@ -1,7 +1,9 @@
 package models
 
 import (
+	"fmt"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -13,19 +15,25 @@ type Upload struct {
 	OriginalName string
 	Extension    string
 	Path         string
-	Filesize     int
+	Filesize     int64
 	created      time.Time
 }
 
 func CreateUpload(uploadData Upload) {
-	var sql = "INSERT INTO " + table + " (name, original_name, extension, path)"
-	sql = sql + " VALUES ('" + uploadData.Name + "','" + uploadData.OriginalName + "', '" + uploadData.Extension + "','" + uploadData.Path + "')"
 
-	insert, err := db.Query(sql)
+	var sql = fmt.Sprintf("INSERT INTO %s (name, original_name, extension, path, filesize) VALUES (?, ?, ?, ?, ?)", table)
+	var valueArgs []interface{}
+
+	valueArgs = append(valueArgs,
+		uploadData.Name,
+		uploadData.OriginalName,
+		uploadData.Extension,
+		uploadData.Path,
+		strconv.FormatInt(uploadData.Filesize, 10))
+
+	_, err := db.Exec(sql, valueArgs...)
 
 	if err != nil {
 		log.Fatal("Error inserting data in database: " + err.Error())
 	}
-
-	defer insert.Close()
 }
