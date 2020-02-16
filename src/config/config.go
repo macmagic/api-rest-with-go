@@ -33,11 +33,12 @@ type AppConfig struct {
 var Config *AppConfig
 var once sync.Once
 
-func GetAppConfig() {
+func GetAppConfig() *AppConfig {
 	once.Do(func() {
 		appServerConfig := loadConfig()
 		Config = &appServerConfig
 	})
+	return Config
 }
 
 func loadConfig() AppConfig {

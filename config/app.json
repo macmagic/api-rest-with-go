@@ -10,7 +10,7 @@
       "db": "apirestgo"
     },
     "files": {
-      "filePath": "/tmp"
+      "path": "uploads/"
     }
   }
 }

@@ -1,18 +1,20 @@
 package service
 
 import (
-	"config"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
+	"models"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 var filePath string
 
 func Uploader(r *http.Request) int {
-	filePath = config.Config.Server.Files.Path
-	r.ParseMultipartForm(10 << 20)
+	filePath = BaseConfig.Server.Files.Path
+	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("file")
 
 	if err != nil {
@@ -22,32 +24,41 @@ func Uploader(r *http.Request) int {
 		return 1
 	}
 
+	path, _ := os.Getwd()
+
+	path = path + "/../" + filePath
+
+	log.Println(path)
+
 	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
 	fmt.Printf("File Size: %+v\n", handler.Size)
 	fmt.Printf("MIME Header: %+v\n", handler.Header)
 
 	defer file.Close()
-
-	tmpFile, err := ioutil.TempFile(filePath+"test.jpeg", "upload-*.png")
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer tmpFile.Close()
-
-	fileBytes, err := ioutil.ReadAll(file)
+	log.Println(path + handler.Filename)
+	f, err := os.OpenFile(path+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
-	tmpFile.Write(fileBytes)
-	fmt.Println("Finish")
+	var uploadData = models.Upload{
+		Id:           0,
+		Name:         handler.Filename,
+		OriginalName: handler.Filename,
+		Extension:    filepath.Ext(handler.Filename),
+		Path:         path + handler.Filename,
+	}
+
+	models.CreateUpload(uploadData)
+
+	defer f.Close()
+
+	io.Copy(f, file)
 
 	return 0
 }
 
-func NewService() {
-	fmt.Println(BaseConfig.Server.Domain)
+func saveUpload(filename string, originalname string, extension string, path string) {
+
 }
