@@ -12,7 +12,7 @@ import (
 
 var filePath string
 
-func Uploader(r *http.Request) int {
+func Uploader(r *http.Request) error {
 	filePath = BaseConfig.Server.Files.Path
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("file")
@@ -21,7 +21,7 @@ func Uploader(r *http.Request) int {
 		fmt.Println("Error retriving the file")
 		fmt.Println(err)
 		log.Fatal("Error when retreiving the file :(")
-		return 1
+		return err
 	}
 
 	path, _ := os.Getwd()
@@ -40,6 +40,7 @@ func Uploader(r *http.Request) int {
 
 	if err != nil {
 		log.Fatal(err)
+		return err
 	}
 
 	defer f.Close()
@@ -50,14 +51,19 @@ func Uploader(r *http.Request) int {
 
 	if err != nil {
 		log.Fatal("Error when get stat from file: " + err.Error())
+		return err
 	}
 
-	saveUpload(handler.Filename, handler.Filename, filepath.Ext(handler.Filename), filePath, fi.Size())
+	err = saveUpload(handler.Filename, handler.Filename, filepath.Ext(handler.Filename), filePath, fi.Size())
 
-	return 0
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func saveUpload(filename string, originalname string, extension string, path string, filesize int64) {
+func saveUpload(filename string, originalname string, extension string, path string, filesize int64) error {
 	var uploadData = models.Upload{
 		Id:           0,
 		Name:         filename,
@@ -67,5 +73,5 @@ func saveUpload(filename string, originalname string, extension string, path str
 		Filesize:     filesize,
 	}
 
-	models.CreateUpload(uploadData)
+	return models.CreateUpload(uploadData)
 }

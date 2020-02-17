@@ -19,7 +19,7 @@ type Upload struct {
 	created      time.Time
 }
 
-func CreateUpload(uploadData Upload) {
+func CreateUpload(uploadData Upload) error {
 
 	var sql = fmt.Sprintf("INSERT INTO %s (name, original_name, extension, path, filesize) VALUES (?, ?, ?, ?, ?)", table)
 	var valueArgs []interface{}
@@ -34,6 +34,9 @@ func CreateUpload(uploadData Upload) {
 	_, err := db.Exec(sql, valueArgs...)
 
 	if err != nil {
-		log.Fatal("Error inserting data in database: " + err.Error())
+		log.Println("Error inserting data in database: " + err.Error())
+		return err
 	}
+
+	return nil
 }
