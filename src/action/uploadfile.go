@@ -9,7 +9,7 @@ func UploadFile(writer http.ResponseWriter, r *http.Request) {
 	err := service.Uploader(r)
 
 	if err != nil {
-		writer.WriteHeader(500)
+		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 

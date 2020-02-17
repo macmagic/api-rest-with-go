@@ -11,6 +11,18 @@
       "method" : "POST",
       "path" : "/upload",
       "handleFunc" : "UploadFile"
+    },
+    {
+      "name" : "get_file",
+      "method" : "GET",
+      "path" : "/get-files/{id}",
+      "handleFunc" : "GetFile"
+    },
+    {
+      "name" : "get_file",
+      "method" : "GET",
+      "path" : "/get-files",
+      "handleFunc" : "GetFile"
     }
   ]
 }

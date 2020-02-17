@@ -25,6 +25,4 @@ func init() {
 	}
 	db = conn
 	log.Println("Connection success")
-
-	//defer conn.Close()
 }

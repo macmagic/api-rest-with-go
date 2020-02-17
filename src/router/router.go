@@ -57,4 +57,5 @@ func getRoutesFromFile() Routes {
 var functions = map[string]http.HandlerFunc{
 	"Index":      action.IndexAction,
 	"UploadFile": action.UploadFile,
+	"GetFile":    action.GetFile,
 }
