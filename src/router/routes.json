@@ -19,10 +19,10 @@
       "handleFunc" : "GetFile"
     },
     {
-      "name" : "get_file",
+      "name" : "get_files",
       "method" : "GET",
       "path" : "/get-files",
-      "handleFunc" : "GetFile"
+      "handleFunc" : "GetFiles"
     }
   ]
 }

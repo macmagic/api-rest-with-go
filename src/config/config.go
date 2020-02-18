@@ -44,7 +44,7 @@ func GetAppConfig() *AppConfig {
 func loadConfig() AppConfig {
 	var appConfig AppConfig
 	path, _ := os.Getwd()
-	file, errOs := os.OpenFile(path+"/../config/app.json", os.O_RDONLY, 0777)
+	file, errOs := os.OpenFile(path+"/config/app.json", os.O_RDONLY, 0777)
 
 	if errOs != nil {
 		log.Fatal(errOs)

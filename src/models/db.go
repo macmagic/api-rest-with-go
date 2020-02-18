@@ -11,6 +11,7 @@ import _ "github.com/go-sql-driver/mysql"
 var db *sql.DB
 
 func init() {
+	log.Println("Load DB connection...")
 	var appConfig = config.GetAppConfig()
 	var dbHost = appConfig.Server.Database.Host
 	var dbUser = appConfig.Server.Database.User

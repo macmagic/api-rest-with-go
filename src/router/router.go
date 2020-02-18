@@ -24,7 +24,6 @@ func LoadRoutes() *mux.Router {
 	var routes = getRoutesFromFile()
 	var router = mux.NewRouter().StrictSlash(true)
 	for _, route := range routes.Routes {
-		log.Print(route.Name)
 		router.
 			Methods(route.Method).
 			Path(route.Path).
@@ -37,7 +36,6 @@ func LoadRoutes() *mux.Router {
 func getRoutesFromFile() Routes {
 	var routes Routes
 	path, _ := os.Getwd()
-	log.Println("Path of file: " + path + "/router/routes.json")
 	file, errOs := os.OpenFile(path+"/router/routes.json", os.O_RDONLY, 0777)
 
 	if errOs != nil {
@@ -58,4 +56,5 @@ var functions = map[string]http.HandlerFunc{
 	"Index":      action.IndexAction,
 	"UploadFile": action.UploadFile,
 	"GetFile":    action.GetFile,
+	"GetFiles":   action.GetFiles,
 }

@@ -1,7 +1,7 @@
 package action
 
 import (
-	"encoding/json"
+	"apicommon"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -11,20 +11,20 @@ import (
 
 func GetFile(writer http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	id, err := strconv.Atoi(params["id"])
 
+	paramId, err := strconv.Atoi(params["id"])
 	if err != nil {
-		log.Panicln("Error when try to convert string to int")
-	}
-
-	upload := service.GetFile(id)
-
-	if upload == nil {
-		writer.WriteHeader(http.StatusNotFound)
+		log.Println("Error when try to convert string to int")
+		apicommon.JsonResponse(writer, nil, http.StatusBadRequest)
 		return
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(upload)
+	upload := service.GetFile(paramId)
+
+	if upload == nil {
+		apicommon.JsonResponse(writer, nil, http.StatusNotFound)
+		return
+	}
+
+	apicommon.JsonResponse(writer, map[string]interface{}{"content": upload}, http.StatusOK)
 }

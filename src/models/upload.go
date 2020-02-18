@@ -44,7 +44,6 @@ func CreateUpload(uploadData Upload) error {
 
 func GetFile(id int) *Upload {
 	var sqlStatement = fmt.Sprintf("SELECT id, name, original_name, extension, path, filesize FROM %s WHERE id=?;", table)
-	log.Println(sqlStatement)
 	var upload Upload
 	row := db.QueryRow(sqlStatement, id)
 	err := row.Scan(&upload.Id, &upload.Name, &upload.OriginalName, &upload.Extension, &upload.Path, &upload.Filesize)
@@ -60,4 +59,28 @@ func GetFile(id int) *Upload {
 	}
 
 	return nil
+}
+
+func GetFiles() []Upload {
+	var sqlStatement = fmt.Sprintf("SELECT id, name, original_name, extension, path, filesize FROM %s;", table)
+	var uploadRow Upload
+	var uploads []Upload
+	rows, err := db.Query(sqlStatement)
+
+	if err != nil {
+		log.Panicln("Error when execute query in database: " + err.Error())
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&uploadRow.Id, &uploadRow.Name, &uploadRow.OriginalName, &uploadRow.Extension, &uploadRow.Path, &uploadRow.Filesize)
+		if err != nil {
+			log.Panicln("Error when retrieve data from resultset: " + err.Error())
+		}
+
+		uploads = append(uploads, uploadRow)
+	}
+
+	return uploads
 }
