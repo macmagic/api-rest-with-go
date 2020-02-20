@@ -8,22 +8,23 @@ import (
 	"time"
 )
 
-const table string = "uploadfiles"
+const table string = "upload"
 
 type Upload struct {
-	Id           int
-	Name         string
-	OriginalName string
-	Extension    string
-	Path         string
-	Filesize     int64
+	Id           int    `json:"id"`
+	Name         string `json:"name"`
+	OriginalName string `json:"original_name"`
+	Extension    string `json:"extension"`
+	Path         string `json:"path"`
+	Filesize     int64  `json:"filesize"`
 	created      time.Time
 }
 
-func CreateUpload(uploadData Upload) error {
+func CreateUpload(uploadData Upload) (id int64, err error) {
 
 	var sqlStatement = fmt.Sprintf("INSERT INTO %s (name, original_name, extension, path, filesize) VALUES (?, ?, ?, ?, ?)", table)
 	var valueArgs []interface{}
+	id = 0
 
 	valueArgs = append(valueArgs,
 		uploadData.Name,
@@ -32,17 +33,25 @@ func CreateUpload(uploadData Upload) error {
 		uploadData.Path,
 		strconv.FormatInt(uploadData.Filesize, 10))
 
-	_, err := db.Exec(sqlStatement, valueArgs...)
+	res, err := db.Exec(sqlStatement, valueArgs...)
 
 	if err != nil {
 		log.Println("Error inserting data in database: " + err.Error())
-		return err
+		return
+	} else {
+		id, err := res.LastInsertId()
+
+		if err != nil {
+			log.Println("Error when get last insert id: " + err.Error())
+		} else {
+			return id, nil
+		}
 	}
 
-	return nil
+	return
 }
 
-func GetFile(id int) *Upload {
+func GetFile(id int64) *Upload {
 	var sqlStatement = fmt.Sprintf("SELECT id, name, original_name, extension, path, filesize FROM %s WHERE id=?;", table)
 	var upload Upload
 	row := db.QueryRow(sqlStatement, id)

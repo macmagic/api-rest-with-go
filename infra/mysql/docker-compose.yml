@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'apirestgo'
+      MYSQL_USER: 'apirestgo'
+      MYSQL_PASSWORD: 'temporal'
+      MYSQL_ROOT_PASSWORD: 'temporal'
+    ports:
+      - '63306:3306'

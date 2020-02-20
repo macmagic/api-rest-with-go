@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"config"
@@ -10,11 +10,7 @@ import (
 	"strconv"
 )
 
-func init() {
-	log.Println("App starting...")
-}
-
-func main() {
+func Run() {
 	log.Println("Load app config...")
 	config.GetAppConfig()
 	service.GetConfig(config.Config)

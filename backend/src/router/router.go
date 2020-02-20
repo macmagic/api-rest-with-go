@@ -36,7 +36,7 @@ func LoadRoutes() *mux.Router {
 func getRoutesFromFile() Routes {
 	var routes Routes
 	path, _ := os.Getwd()
-	file, errOs := os.OpenFile(path+"/router/routes.json", os.O_RDONLY, 0777)
+	file, errOs := os.OpenFile(path+"/src/router/routes.json", os.O_RDONLY, 0777)
 
 	if errOs != nil {
 		log.Fatal(errOs)

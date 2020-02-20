@@ -7,11 +7,11 @@ import (
 )
 
 func UploadFile(writer http.ResponseWriter, r *http.Request) {
-	err := service.Uploader(r)
+	upload, err := service.Uploader(r)
 
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	apicommon.JsonResponse(writer, nil, http.StatusCreated)
+	apicommon.JsonResponse(writer, map[string]interface{}{"content": upload}, http.StatusCreated)
 }

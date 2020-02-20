@@ -16,7 +16,8 @@ type DatabaseConfig struct {
 }
 
 type FilesConfig struct {
-	Path string
+	Path            string
+	ProjectRootPath string
 }
 
 type ServerConfig struct {
@@ -36,6 +37,7 @@ var once sync.Once
 func GetAppConfig() *AppConfig {
 	once.Do(func() {
 		appServerConfig := loadConfig()
+		appServerConfig.Server.Files.ProjectRootPath = getProjectRootPath()
 		Config = &appServerConfig
 	})
 	return Config
@@ -44,7 +46,7 @@ func GetAppConfig() *AppConfig {
 func loadConfig() AppConfig {
 	var appConfig AppConfig
 	path, _ := os.Getwd()
-	file, errOs := os.OpenFile(path+"/config/app.json", os.O_RDONLY, 0777)
+	file, errOs := os.OpenFile(path+"/src/config/app.json", os.O_RDONLY, 0777)
 
 	if errOs != nil {
 		log.Fatal(errOs)
@@ -59,4 +61,10 @@ func loadConfig() AppConfig {
 	}
 
 	return appConfig
+}
+
+func getProjectRootPath() string {
+	path, _ := os.Getwd()
+	path = path + "/../"
+	return path
 }
